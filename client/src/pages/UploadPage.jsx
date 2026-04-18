@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAppNavigate } from '../hooks/useAppNavigate.jsx';
-import useImageStore from '../store/useImageStore.js';
+import useImageStore, { useLoadStore } from '../store/useImageStore.js';
 import Selections from '../components/Selections.jsx';
 
 
@@ -14,12 +14,23 @@ function Icon() {
 function UploadPage() {
   const {goPromptReview} = useAppNavigate();
   const {error,handleImage,preview, handleRemove, setSelections,validateSelections } = useImageStore();
+  const {load,setLoad} = useLoadStore();
 
-
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    console.log(Boolean(preview));
     const isValid = validateSelections();
 
     if (!isValid) return;
+
+    setLoad(true);
+
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+
+        setLoad(false);
+        resolve();
+      }, 5000);
+    })
 
     goPromptReview();
   };
@@ -48,7 +59,7 @@ function UploadPage() {
 
       <Selections/>
 
-      <button onClick={handleContinue}>Next</button>
+      <button disabled={!preview}  onClick={handleContinue}>{load ? "Generate Prompt....." : "Generate Prompt"}</button>
     </div>
   )
 }

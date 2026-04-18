@@ -2,6 +2,16 @@ import { create } from "zustand";
 import { createImagePreviewState, isSelectionValid, isValidImageFile } from "../helper/util";
 import { IMAGE_ERRORS } from "../helper/helper";
 
+
+export const useLoadStore = create((set, get) => ({
+  load: false,
+
+  setLoad: (bool) => {
+    set({load: bool});
+  }
+
+}));
+
 const useImageStore = create((set, get) => ({
   preview: "",
   error: "",
