@@ -21,6 +21,7 @@ const useImageStore = create((set, get) => ({
     color: "",
     aspectRatio: "",
   },
+  imgFile: "",
 
 
   setSelections: (value) => {
@@ -40,6 +41,7 @@ const useImageStore = create((set, get) => ({
       set({error, preview: ""});
       return;
     }
+    
     
     set(createImagePreviewState(file));
   },

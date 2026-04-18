@@ -13,7 +13,7 @@ function Icon() {
 
 function UploadPage() {
   const {goPromptReview} = useAppNavigate();
-  const {error,handleImage,preview, handleRemove, setSelections,validateSelections } = useImageStore();
+  const {error,handleImage,preview, handleRemove, setSelections,validateSelections, imgFile } = useImageStore();
   const {load,setLoad} = useLoadStore();
 
   const handleContinue = async () => {
@@ -24,6 +24,23 @@ function UploadPage() {
 
     setLoad(true);
 
+    const formData = new FormData();
+    formData.append("image", imgFile);
+    formData.append("prompt", "Describe this image");
+
+    const response = await fetch("http://localhost:5000/api/gemini/analyze-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+
+
+
+
+
     await new Promise((resolve, reject) => {
       setTimeout(() => {
 
@@ -32,7 +49,10 @@ function UploadPage() {
       }, 5000);
     })
 
-    goPromptReview();
+
+
+
+    //goPromptReview();
   };
 
   return (

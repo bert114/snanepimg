@@ -23,6 +23,7 @@ export function createImagePreviewState(file) {
   return {
     error: "",
     preview: URL.createObjectURL(file),
+    imgFile: file
   };
 }
 
