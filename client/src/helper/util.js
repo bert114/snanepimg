@@ -1,16 +1,23 @@
+import { IMAGE_ERRORS, isValidFileSize } from "./helper";
+
 export function isValidImageFile(file) {
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (!file) {
-    return { valid: false, error: "No file selected." };
+    return { valid: false, error: IMAGE_ERRORS.noFile };
   }
 
   if (!allowedTypes.includes(file.type)) {
-    return { valid: false, error: "Only JPG, PNG, and WEBP files are allowed." };
+    return { valid: false, error: IMAGE_ERRORS.type };
+  } 
+
+  if (!isValidFileSize(file)) {   
+    return { valid: false, error: IMAGE_ERRORS.size, };
   }
 
   return { valid: true, error: "" };
 }
+
 
 export function createImagePreviewState(file) {
   return {

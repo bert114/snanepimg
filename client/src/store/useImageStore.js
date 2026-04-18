@@ -7,10 +7,7 @@ const useImageStore = create((set, get) => ({
 
   handleImage: (e) => {
     const file = e.target.files[0];
-    const {valid,error} = isValidImageFile(file);
-
-
-    console.log(error);
+    const {valid, error} = isValidImageFile(file);
 
     if (!valid) {
       set({error, preview: ""});
@@ -18,9 +15,12 @@ const useImageStore = create((set, get) => ({
     }
     
     set(createImagePreviewState(file));
-
-    console.log(createImagePreviewState(file));
   },
+
+  handleRemove: (e) => {
+    e.stopPropagation();
+    set({preview: ""});
+  }
 }));
 
 export default useImageStore;

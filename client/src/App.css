@@ -182,3 +182,30 @@
     border-right-color: var(--border);
   }
 }
+
+
+img {
+  width: 100%;
+  display: block;
+}
+
+
+
+
+.close {
+  display: none;
+}
+
+.preview-img:has(img) {
+  width: 40%;
+  margin-inline: auto;
+  position: relative;
+
+  .close {
+    display: initial;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
+}
+
