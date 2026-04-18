@@ -26,3 +26,15 @@ export function createImagePreviewState(file) {
   };
 }
 
+
+export function isSelectionValid(selections) {
+    if (!selections.aspectRatio) {
+        return { valid: false, error: "Select aspect ratio" };
+    }
+
+    if (!selections.color) {
+        return { valid: false, error: "Select color" };
+    }
+
+    return { valid: true, error: "" };
+}
