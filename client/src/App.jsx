@@ -8,7 +8,6 @@ import UploadPage from './pages/UploadPage'
 
 function App() {
   
-
   return (
     <>
       <BrowserRouter>
