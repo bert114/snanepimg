@@ -28,12 +28,12 @@ function UploadPage() {
     formData.append("image", imgFile);
     formData.append("prompt", "Describe this image");
 
-    const response = await fetch("http://localhost:5000/api/gemini/analyze-image", {
+    const res = await fetch("http://localhost:5000/api/gemini/analyze-image", {
       method: "POST",
       body: formData,
     });
 
-    const data = await response.json();
+    const data = await res.json();
     console.log(data);
 
 
