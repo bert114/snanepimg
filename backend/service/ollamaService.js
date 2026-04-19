@@ -11,6 +11,11 @@ export const sendImageToOllama = async ({ file, prompt }) => {
       prompt,
       images: [base64Image],
       stream: false,
+      options: {
+        num_predict: 1200,
+        temperature: 0.1,
+        top_p: 0.9,
+      },
     }),
   });
 

@@ -1,12 +1,17 @@
 import { sendImageToOllama } from "../service/ollamaService.js";
+import { DEFAULT_IMAGE_PROMPT } from "../utils/gemini.js";
 import { handleApiError } from "../utils/res.js";
+
+
+
+
+
 
 export const analyzeImage = async (req, res) => {
   try {
     const file = req.file;
-    const prompt = req.body.prompt || "Describe this image";
+    const prompt = DEFAULT_IMAGE_PROMPT;
 
-    console.log(req);
 
     if (!file) {
       return res.status(400).json({
