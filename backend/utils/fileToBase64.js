@@ -1,3 +1,3 @@
-export function fileBufferToBase64(buffer) {
-  return buffer.toString("base64");
+export function fileBufferToBase64(file) {
+  return file.buffer.toString("base64");
 }

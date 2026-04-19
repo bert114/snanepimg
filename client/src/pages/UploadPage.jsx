@@ -17,7 +17,7 @@ function UploadPage() {
   const {load,setLoad} = useLoadStore();
 
   const handleContinue = async () => {
-    console.log(Boolean(preview));
+    
     const isValid = validateSelections();
 
     if (!isValid) return;
@@ -38,16 +38,16 @@ function UploadPage() {
 
 
 
+    setLoad(false);
 
 
+    // await new Promise((resolve, reject) => {
+    //   setTimeout(() => {
 
-    await new Promise((resolve, reject) => {
-      setTimeout(() => {
-
-        setLoad(false);
-        resolve();
-      }, 5000);
-    })
+        
+    //     resolve();
+    //   }, 5000);
+    // })
 
 
 
