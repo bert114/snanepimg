@@ -1,6 +1,6 @@
 import { sendImageToOllama } from "../service/ollamaService.js";
 import { DEFAULT_IMAGE_PROMPT } from "../utils/gemini.js";
-import { handleApiError } from "../utils/res.js";
+import { buildUserInstruction, handleApiError } from "../utils/res.js";
 
 
 
@@ -10,7 +10,7 @@ import { handleApiError } from "../utils/res.js";
 export const analyzeImage = async (req, res) => {
   try {
     const file = req.file;
-    const prompt = DEFAULT_IMAGE_PROMPT;
+    const prompt = req.body.prompt;
 
 
     if (!file) {
@@ -20,7 +20,26 @@ export const analyzeImage = async (req, res) => {
       });
     }
 
-    const result = await sendImageToOllama({ file, prompt });
+
+
+    let rawPrompt = req.body.prompt;
+
+    if (typeof rawPrompt === "string") {
+      try {
+        rawPrompt = JSON.parse(rawPrompt);
+      } catch {
+        rawPrompt = rawPrompt.trim();
+      }
+    }
+
+    const userInstruction = buildUserInstruction(rawPrompt);
+
+    const finalPrompt = userInstruction
+      ? `${DEFAULT_IMAGE_PROMPT}\n\nAdditional user instruction:\n${userInstruction}`
+      : DEFAULT_IMAGE_PROMPT;
+
+
+    const result = await sendImageToOllama({ file, prompt: finalPrompt });
 
     console.log(result);
 

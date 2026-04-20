@@ -42,3 +42,35 @@ export const handleApiError = (res, error) => {
     error: error.message || "Server error",
   });
 };
+
+export function buildUserInstruction(userInput) {
+  if (!userInput) return "";
+
+  if (typeof userInput === "string") {
+    return userInput.trim();
+  }
+
+  if (typeof userInput === "object") {
+    const parts = [];
+
+    if (userInput.noText === true) {
+      parts.push("Prefer no visible text in the described result, but only if the image actually contains no text.");
+    }
+
+    if (userInput.plainBackground === true) {
+      parts.push("Pay attention to whether the background looks plain or simple.");
+    }
+
+    if (userInput.color) {
+      parts.push(`Pay attention to the dominant color, especially whether blue is visible.`);
+    }
+
+    if (userInput.aspectRatio) {
+      parts.push(`Note the apparent framing or aspect ratio if it is visually relevant, such as ${userInput.aspectRatio}.`);
+    }
+
+    return parts.join(" ");
+  }
+
+  return "";
+}
