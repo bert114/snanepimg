@@ -96,4 +96,40 @@ const useImageStore = create((set, get) => ({
 
 }));
 
+
+export const requestStore = create((set,get) => ({
+
+  sendReq: async () => {
+
+    const { imgFile, selections, validateSelections, setGeneratedPrompt } = useImageStore.getState();
+    const {setLoad} = useLoadStore.getState();
+
+    setLoad(true);
+
+    if (!validateSelections()) return;
+
+
+    const formData = new FormData();
+    formData.append("image", imgFile);
+    formData.append("prompt", JSON.stringify(selections));
+
+    const res = await fetch("http://localhost:5000/api/gemini/analyze-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      throw new Error("Request failed");
+    }
+
+    const data = await res.json();
+
+    setLoad(false);
+
+    setGeneratedPrompt(data.result);
+
+    return data;
+  }
+}));
+
 export default useImageStore;

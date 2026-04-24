@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAppNavigate } from '../hooks/useAppNavigate.jsx';
-import useImageStore, { useLoadStore } from '../store/useImageStore.js';
+import useImageStore, { requestStore, useLoadStore } from '../store/useImageStore.js';
 import Selections from '../components/Selections.jsx';
 
 
@@ -14,7 +14,7 @@ function Icon() {
 function UploadPage() {
   const {goPromptReview} = useAppNavigate();
   const {error,handleImage,preview, handleRemove, setSelections,selections,validateSelections, imgFile, generatedPrompt, setGeneratedPrompt } = useImageStore();
-  
+  const {sendReq} = requestStore();
   const {load,setLoad} = useLoadStore();
 
   const handleContinue = async () => {
@@ -23,33 +23,15 @@ function UploadPage() {
 
     if (!isValid || load) return;
 
+    const data = await sendReq();
 
-    setLoad(true);
-
-    const formData = new FormData();
-    formData.append("image", imgFile);
-    formData.append("prompt", JSON.stringify(selections));
-
-    const res = await fetch("http://localhost:5000/api/gemini/analyze-image", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-
-    console.log(data.result);
-
-
-
-    setLoad(false);
     setGeneratedPrompt(data.result);
 
 
 
 
 
-    //goPromptReview();
+    goPromptReview();
   };
 
   return (
@@ -77,7 +59,7 @@ function UploadPage() {
       <Selections/>
 
       <button disabled={!preview}  onClick={handleContinue}>{load ? "Generating Prompt....." : "Generate Prompt"}</button>
-      <p>{generatedPrompt}</p>
+      
     </div>
   )
 }

@@ -1,14 +1,29 @@
 import React from 'react'
 import { useAppNavigate } from '../hooks/useAppNavigate';
+import useImageStore, { requestStore, useLoadStore } from '../store/useImageStore';
 
 function PromptReview() {
-    const {goUpload, goPromptReview, goResult} = useAppNavigate();
+  const {goUpload, goPromptReview, goResult} = useAppNavigate();
+
+  const {error,handleImage,preview, handleRemove, setSelections,selections,validateSelections, imgFile, generatedPrompt, setGeneratedPrompt } = useImageStore();
+  const {sendReq} = requestStore();
+  const {load,setLoad} = useLoadStore();
 
   return (
     <div>
 
-        <h2>PromptReview</h2>
-        <button onClick={goResult}>next</button>
+        <div className="img-prompt">
+          <textarea
+            value={generatedPrompt ?? ""}
+            onChange={(e) => setGeneratedPrompt(e.target.value)}
+          />
+
+
+          <img src={preview} alt="" />
+      </div>
+      <button type="button" onClick={sendReq}>{load ? "Regenerating prmpt": "Regenerate  prompt"}</button>
+      <button type="button">Generate image</button>
+      <button type="button" onClick={goUpload}>Back</button>
     </div>
   )
 }
