@@ -22,6 +22,11 @@ const useImageStore = create((set, get) => ({
     aspectRatio: "",
   },
   imgFile: "",
+  generatedPrompt: "",
+
+  setGeneratedPrompt: (value) => {
+    set({generatedPrompt: value});
+  },
 
 
   setSelections: (value) => {

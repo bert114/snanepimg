@@ -13,14 +13,16 @@ function Icon() {
 
 function UploadPage() {
   const {goPromptReview} = useAppNavigate();
-  const {error,handleImage,preview, handleRemove, setSelections,selections,validateSelections, imgFile } = useImageStore();
+  const {error,handleImage,preview, handleRemove, setSelections,selections,validateSelections, imgFile, generatedPrompt, setGeneratedPrompt } = useImageStore();
+  
   const {load,setLoad} = useLoadStore();
 
   const handleContinue = async () => {
     
     const isValid = validateSelections();
 
-    if (!isValid) return;
+    if (!isValid || load) return;
+
 
     setLoad(true);
 
@@ -34,20 +36,15 @@ function UploadPage() {
     });
 
     const data = await res.json();
-    console.log(data);
+
+
+    console.log(data.result);
 
 
 
     setLoad(false);
+    setGeneratedPrompt(data.result);
 
-
-    // await new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-
-        
-    //     resolve();
-    //   }, 5000);
-    // })
 
 
 
@@ -79,7 +76,8 @@ function UploadPage() {
 
       <Selections/>
 
-      <button disabled={!preview}  onClick={handleContinue}>{load ? "Generate Prompt....." : "Generate Prompt"}</button>
+      <button disabled={!preview}  onClick={handleContinue}>{load ? "Generating Prompt....." : "Generate Prompt"}</button>
+      <p>{generatedPrompt}</p>
     </div>
   )
 }

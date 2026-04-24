@@ -5,8 +5,6 @@ import { buildUserInstruction } from "../utils/res.js";
 export const sendImageToOllama = async ({ file, prompt }) => {
   const base64Image = file.buffer.toString("base64");
 
-  
-
   const response = await fetch("http://localhost:11434/api/generate", {
     method: "POST",
     headers: {
