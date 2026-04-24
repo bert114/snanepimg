@@ -11,15 +11,19 @@ function PromptReview() {
 
   return (
     <div>
+      <h1>Review & Edit Prompt</h1>
+      <span>You can edit this before generating images</span>
+      <div className="img-prompt">
+        <div className="img-container">
+            <img src={preview} alt="" />
 
-        <div className="img-prompt">
-          <textarea
+        </div>
+        <textarea
             value={generatedPrompt ?? ""}
             onChange={(e) => setGeneratedPrompt(e.target.value)}
           />
 
-
-          <img src={preview} alt="" />
+          
       </div>
       <button type="button" onClick={sendReq}>{load ? "Regenerating prmpt": "Regenerate  prompt"}</button>
       <button type="button">Generate image</button>

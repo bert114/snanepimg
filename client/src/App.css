@@ -191,7 +191,7 @@ img {
 
 
 
-
+/* 
 .close {
   display: none;
 }
@@ -207,7 +207,39 @@ img {
     right: 0;
     position: absolute;
   }
+} */
+
+
+.close {
+  display: none;
 }
+
+.preview-img:has(img.show)  {
+  position: relative;
+  img.show {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+    margin-inline: auto;
+  }
+
+
+
+
+  .close {
+
+    top: 1rem;
+    right: 1rem;
+    display: initial;
+    position: absolute;
+
+  }
+  
+}
+
+
+
 
 
 .selection {
@@ -335,7 +367,19 @@ input{
 .img-prompt {
   display: flex;
 
+  textarea {
+    width: 50%;
+  }
+
+  .img-container {
+    width: 50%;
+  }
   
+
+  img {
+    width: 100%;
+    
+  }
 }
 
 
