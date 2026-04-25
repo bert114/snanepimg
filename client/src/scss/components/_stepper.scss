@@ -1,0 +1,167 @@
+body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root {
+    --size: 36px;
+}
+
+.stepper-clean {
+  --step-done: #22b36b;
+  --step-active: #5f8ff7;
+  --step-upcoming: #d9e1f2;
+  --step-label: #42464f;
+  --step-label-muted: #7b8089;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  gap: 0;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.stepper-clean .step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-align: center;
+  color: var(--step-label-muted);
+  font: inherit;
+}
+
+.stepper-clean .step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+//   top: var(--size);
+    
+
+    top: calc(var(--size) / 2);
+    left: calc(50% + calc(var(--size) * 0.85));
+    width: calc(100% - calc(var(--size) * 1.7));
+  height: 4px;
+  border-radius: 999px;
+  background: var(--step-upcoming);
+}
+
+.stepper-clean .step.done:not(:last-child)::after {
+  background: var(--step-done);
+}
+
+.stepper-clean .step.active:not(:last-child)::after {
+  background: linear-gradient(
+    to right,
+    var(--step-active) 0 24%,
+    var(--step-upcoming) 24% 100%
+  );
+}
+
+.stepper-clean .step-node {
+    font-size: var(--size);
+  position: relative;
+  z-index: 1;
+  width: 1em;
+  height: 1em;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #eef3ff;
+  border: 3px solid var(--step-upcoming);
+  color: #9badcf;
+  box-shadow: 0 0 0 6px #f6f7fb;
+  transition: 0.2s ease;
+}
+
+.stepper-clean .step-svg {
+  width: calc(var(--size) * 0.4);
+  height: calc(var(--size) * 0.4);
+}
+
+.stepper-clean .grid-icon rect {
+  fill: currentColor;
+}
+
+.stepper-clean .step.done .step-node {
+  background: var(--step-done);
+  border-color: var(--step-done);
+  color: #fff;
+}
+
+.stepper-clean .step.active .step-node {
+  background: var(--step-active);
+  border-color: var(--step-active);
+  color: #fff;
+}
+
+.stepper-clean .step-text {
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 500;
+  color: var(--step-label);
+}
+
+.stepper-clean .step.done .step-text,
+.stepper-clean .step.active .step-text {
+  color: var(--step-label);
+}
+
+.stepper-clean .step:disabled {
+  cursor: default;
+}
+
+// @media (max-width: 860px) {
+//   .stepper-clean {
+//     grid-template-columns: repeat(4, 1fr);
+//     row-gap: 22px;
+//   }
+
+//   .stepper-clean .step::after {
+//     display: none;
+//   }
+// }
+
+.icon-check, .icon-pin, .icon-grid {
+  width: 18px;
+  height: 18px;
+  display: none;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.icon-grid span {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.step.done .step-icon {
+  border-color: var(--success);
+  background: var(--success);
+  color: #fff;
+}
+
+.step.done .icon-check { display: block; }
+
+.step.active .step-icon {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.step.active .icon-pin { display: block; }
+
+.step:not(.done):not(.active) .icon-grid { display: grid; }
+
+.step:disabled {
+  cursor: not-allowed;
+}

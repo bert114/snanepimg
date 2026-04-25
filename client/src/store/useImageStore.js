@@ -51,9 +51,13 @@ const useImageStore = create((set, get) => ({
     set(createImagePreviewState(file));
   },
 
-  handleRemove: (e) => {
+  handleRemove: (e, inputRef) => {
     e.stopPropagation();
     set({preview: ""});
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   },
 
 

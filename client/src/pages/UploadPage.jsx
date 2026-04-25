@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useAppNavigate } from '../hooks/useAppNavigate.jsx';
 import useImageStore, { requestStore, useLoadStore } from '../store/useImageStore.js';
 import Selections from '../components/Selections.jsx';
@@ -11,8 +11,39 @@ function Icon() {
   )
 }
 
+const RenderUploadContent = ({preview, onRemove, inputRef}) => {
+  if (preview) {
+    return (
+      <div className="img-wrapper">
+        <img src={preview} alt="Preview" />
+        <button
+          onClick={(e) => onRemove(e,inputRef)}
+          className="preview-action preview-remove"
+          id="removeImageBtn"
+          type="button"
+          aria-label="Remove image"
+        >
+          <div className='icon-preview'>x</div>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <span className="upload-title">
+        Drag & Drop your files or <u>Browse</u>
+      </span>
+      <span className="upload-subtitle">
+        JPG, PNG, WEBP · max 5MB
+      </span>
+    </>
+  );
+};
+
 
 function UploadPage() {
+  const inputRef = useRef(null);
   const {goPromptReview} = useAppNavigate();
   const {error,handleImage,preview, handleRemove, setSelections,selections,validateSelections, imgFile, generatedPrompt, setGeneratedPrompt } = useImageStore();
   const {sendReq} = requestStore();
@@ -37,31 +68,28 @@ function UploadPage() {
 
   return (
 
-    <div>
-      <label className="custum-file-upload" htmlFor="file">
-      <div className="icon">
+    <section id="screen-upload" className="screen active">
+      <div className="panel upload-preferences-panel">
+        <div className="upload-preferences-grid">
+          <div className="upload-column">
+            <p className="step-label">Step 1 of 3</p>
+            <h2>Upload reference</h2>
+            <p className="muted">Start with one JPG, PNG, or WEBP image.</p>
 
-      <div className="preview-img">
-        {preview ? <img className='show' src={preview} alt="" /> : <Icon/>}
-        <button className="close" onClick={handleRemove}>x</button>
-      </div>
-        
-      
-      </div>
-      <div className="text">
-        <span>Click to upload image</span>
+            <label className="upload-box" id="uploadBox">
+              <input ref={inputRef} onChange={handleImage} id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+              <RenderUploadContent preview={preview} onRemove={handleRemove} inputRef={inputRef}/>
+            </label>
+
+            <p id="uploadError" className="error" role="alert"></p>
+          </div>
+
+          
         </div>
-        <input type="file" id="file" onChange={handleImage} accept=".jpg,.jpeg,.png,.webp"/>
-      </label>
+      </div>
 
-      {error && <p>{error}</p>}
-
-
-      <Selections/>
-
-      <button disabled={!preview}  onClick={handleContinue}>{load ? "Generating Prompt....." : "Generate Prompt"}</button>
-      
-    </div>
+    
+    </section>
   )
 }
 
