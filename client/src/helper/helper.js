@@ -7,5 +7,3 @@ export const IMAGE_ERRORS = {
   type: "Only JPG, PNG, and WEBP files are allowed.",
   size: "File must be 5MB or less.",
 };
-
-

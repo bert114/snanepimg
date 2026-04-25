@@ -1,15 +1,17 @@
 import { create } from "zustand";
-import { createImagePreviewState, isSelectionValid, isValidImageFile } from "../helper/util";
+import {
+  createImagePreviewState,
+  isSelectionValid,
+  isValidImageFile,
+} from "../helper/util";
 import { IMAGE_ERRORS } from "../helper/helper";
-
 
 export const useLoadStore = create((set, get) => ({
   load: false,
 
   setLoad: (bool) => {
-    set({load: bool});
-  }
-
+    set({ load: bool });
+  },
 }));
 
 const useImageStore = create((set, get) => ({
@@ -25,41 +27,38 @@ const useImageStore = create((set, get) => ({
   generatedPrompt: "",
 
   setGeneratedPrompt: (value) => {
-    set({generatedPrompt: value});
+    set({ generatedPrompt: value });
   },
-
 
   setSelections: (value) => {
     set((state) => ({
       selections: {
         ...state.selections,
-        ...value
-      }
-    }))
+        ...value,
+      },
+    }));
   },
 
   handleImage: (e) => {
     const file = e.target.files[0];
-    const {valid, error} = isValidImageFile(file);
+    const { valid, error } = isValidImageFile(file);
 
     if (!valid) {
-      set({error, preview: ""});
+      set({ error, preview: "" });
       return;
     }
-    
-    
+
     set(createImagePreviewState(file));
   },
 
   handleRemove: (e, inputRef) => {
     e.stopPropagation();
-    set({preview: ""});
+    set({ preview: "" });
 
     if (inputRef.current) {
       inputRef.current.value = "";
     }
   },
-
 
   validateSelections: () => {
     const { selections } = get();
@@ -79,10 +78,9 @@ const useImageStore = create((set, get) => ({
   },
 
   validateSelections: () => {
-    const { selections,preview } = get();
+    const { selections, preview } = get();
     const { valid, error } = isSelectionValid(selections);
 
-    
     if (!preview) {
       set({ error: IMAGE_ERRORS.noFile });
       return false;
@@ -95,23 +93,17 @@ const useImageStore = create((set, get) => ({
 
     return true;
   },
-
-
-
 }));
 
-
-export const requestStore = create((set,get) => ({
-
+export const requestStore = create((set, get) => ({
   sendReq: async () => {
-
-    const { imgFile, selections, validateSelections, setGeneratedPrompt } = useImageStore.getState();
-    const {setLoad} = useLoadStore.getState();
+    const { imgFile, selections, validateSelections, setGeneratedPrompt } =
+      useImageStore.getState();
+    const { setLoad } = useLoadStore.getState();
 
     setLoad(true);
 
     if (!validateSelections()) return;
-
 
     const formData = new FormData();
     formData.append("image", imgFile);
@@ -133,7 +125,7 @@ export const requestStore = create((set,get) => ({
     setGeneratedPrompt(data.result);
 
     return data;
-  }
+  },
 }));
 
 export default useImageStore;
