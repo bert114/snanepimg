@@ -1,10 +1,12 @@
 .screen {
   display: none;
 }
+
 .screen.active {
   display: block;
   animation: pop 0.25s ease;
 }
+
 @keyframes pop {
   from {
     opacity: 0;
