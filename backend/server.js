@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { generateImage } from "./src/controllers/img.js";
+import imgRoute from "./src/routes/imgRoute.js";
+import visionRoute from "./src/routes/visionRoute.js";
 
 dotenv.config();
 
@@ -15,7 +16,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Backend is running" });
 });
 
-app.use("/api/images", generateImage);
+app.use("/api/images", imgRoute);
+app.use("/api/vision", visionRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
