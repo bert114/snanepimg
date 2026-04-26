@@ -8,6 +8,8 @@ import Selections from "../components/Selections.jsx";
 import fileIcon from "../assets/img/file.png";
 import { useEffect } from "react";
 import { useState } from "react";
+import useImageStore1 from "../store/useImageStorecopy.js";
+import { preventDropDefault } from "../helper/helperImage.js";
 
 function Icon() {
   return <img src={fileIcon} />;
@@ -57,6 +59,9 @@ function UploadPage() {
     generatedPrompt,
     setGeneratedPrompt,
   } = useImageStore();
+
+  const { handleImage1 } = useImageStore1();
+
   const { sendReq } = requestStore();
   const { load, setLoad } = useLoadStore();
 
@@ -113,7 +118,12 @@ function UploadPage() {
   };
 
   return (
-    <section id="screen-upload" className="screen active">
+    <section
+      onDrop={(e) => handleImage1(e)}
+      onDragOver={(e) => e.preventDefault()}
+      id="screen-upload"
+      className="screen active"
+    >
       <div className="panel upload-preferences-panel">
         <div className="upload-preferences-grid">
           <div className="upload-column">
@@ -123,7 +133,7 @@ function UploadPage() {
             <label className="upload-box" id="uploadBox">
               <input
                 ref={inputRef}
-                onChange={handleImage}
+                onChange={handleImage1}
                 id="imageInput"
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -138,12 +148,12 @@ function UploadPage() {
             {/* 
             <p id="uploadError" className="error" role="alert"></p> */}
 
-            <button onClick={test}>Send</button>
+            {/* <button onClick={test}>Send</button> */}
           </div>
         </div>
       </div>
 
-      <img src={imageUrl} alt="Generated" />
+      {/* <img src={imageUrl} alt="Generated" /> */}
     </section>
   );
 }

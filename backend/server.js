@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import imgRoute from "./src/routes/imgRoute.js";
 import visionRoute from "./src/routes/visionRoute.js";
 import modelRoute from "./src/routes/modelRoute.js";
+import uploadRoue from "./src/routes/uploadRoute.js";
 import connectDB from "./src/config/db.js";
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 connectDB();
 
 app.use("/api/images", imgRoute);
+app.use("/api/user", uploadRoue);
 app.use("/api/vision", visionRoute);
 app.use("/api/models", modelRoute);
 

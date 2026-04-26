@@ -6,11 +6,20 @@ import PromptReview from "./pages/PromptReview";
 import Home from "./pages/Home";
 import UploadPage from "./pages/UploadPage";
 import MainLayout from "./layout/MainLayout";
+import Toast from "./components/Toast.jsx";
+import useToastStore from "./store/useToastStore.js";
 
 function App() {
+  const { showToast, message, type } = useToastStore();
+
   return (
     <>
       <BrowserRouter>
+        <Toast
+          message={message}
+          type={type}
+          onClose={() => showToast("", "success")}
+        />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/upload" element={<UploadPage />} />

@@ -10,7 +10,7 @@ body {
 }
 
 :root {
-  --size: 36px;
+  --size: 28px;
 }
 
 .stepper-clean {
@@ -120,11 +120,12 @@ body {
   cursor: default;
 }
 
-// @media (max-width: 860px) {
-//   .stepper-clean {
-//     grid-template-columns: repeat(4, 1fr);
-//     row-gap: 22px;
-//   }
+@media (max-width: 860px) {
+  .stepper-clean {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 22px;
+  }
+}
 
 //   .stepper-clean .step::after {
 //     display: none;
