@@ -6,6 +6,8 @@ import useImageStore, {
 } from "../store/useImageStore.js";
 import Selections from "../components/Selections.jsx";
 import fileIcon from "../assets/img/file.png";
+import { useEffect } from "react";
+import { useState } from "react";
 
 function Icon() {
   return <img src={fileIcon} />;
@@ -41,6 +43,7 @@ const RenderUploadContent = ({ preview, onRemove, inputRef }) => {
 
 function UploadPage() {
   const inputRef = useRef(null);
+  const [imageUrl, setImageUrl] = useState("");
   const { goPromptReview } = useAppNavigate();
   const {
     error,
@@ -68,6 +71,47 @@ function UploadPage() {
     goPromptReview();
   };
 
+  const handleGenerate = async (prompt) => {
+    const response = await fetch(
+      `https://lami-si-penans.onrender.com/api/images/generate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "img4",
+          prompt,
+          n: 1,
+          size: "1024x1024",
+          response_format: "url",
+        }),
+      },
+    );
+
+    const data = await response.json();
+    console.log(data);
+    setImageUrl(data?.data?.data?.[0]?.url || "");
+  };
+
+  const test = async () => {
+    const formData = new FormData();
+    formData.append("image", inputRef.current.files[0]);
+
+    const res = await fetch("http://localhost:5000/api/vision/describe", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    await handleGenerate(data.description);
+
+    console.log(data);
+
+    return data;
+  };
+
   return (
     <section id="screen-upload" className="screen active">
       <div className="panel upload-preferences-panel">
@@ -93,9 +137,13 @@ function UploadPage() {
             </label>
             {/* 
             <p id="uploadError" className="error" role="alert"></p> */}
+
+            <button onClick={test}>Send</button>
           </div>
         </div>
       </div>
+
+      <img src={imageUrl} alt="Generated" />
     </section>
   );
 }

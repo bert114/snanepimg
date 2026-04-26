@@ -1,50 +1,25 @@
 import dotenv from "dotenv";
+import { generateImageDescription } from "../services/visionService.js";
+import { errorResponse, successResponse } from "../helper/responseHelper.js";
 dotenv.config();
 
 export const describeImage = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "Image file is required",
-      });
-    }
+    if (!req.file) return errorResponse(res, 400, "Image file is required");
 
-    const base64Image = req.file.buffer.toString("base64");
+    const description = await generateImageDescription(req.file.buffer);
 
-    const response = await fetch(`${process.env.OLLAMA_URL}/api/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: process.env.OLLAMA_MODEL || "moondream",
-        prompt: "Describe this image clearly and in detail.",
-        images: [base64Image],
-        stream: false,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json({
-        success: false,
-        error: data,
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      description: data.response,
+    return successResponse(res, 200, {
+      description,
     });
   } catch (error) {
     console.error("Describe image error:", error);
 
-    return res.status(500).json({
-      success: false,
-      message: "Failed to describe image",
-      error: error.message,
-    });
+    return errorResponse(
+      res,
+      error.statusCode || 500,
+      error.message || "Failed to describe image",
+      error.details || error.message,
+    );
   }
 };
