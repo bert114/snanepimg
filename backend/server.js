@@ -12,9 +12,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: "https://lami-si-penans.onrender.com",
+    origin: allowedOrigins,
   }),
 );
 app.use(express.json());
