@@ -1,3 +1,4 @@
+import Upload from "../model/uploadModel.js";
 import { bufferToBase64 } from "../utils/imageUtils.js";
 
 export const saveDb = async (req) => {

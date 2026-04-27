@@ -1,5 +1,4 @@
 import { errorResponse, successResponse } from "../helper/responseHelper.js";
-import Upload from "../model/uploadModel.js";
 import { saveDb } from "../services/cloudinaryService.js";
 
 const uploadController = async (req, res) => {
