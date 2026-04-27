@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { use, useRef } from "react";
 import { useAppNavigate } from "../hooks/useAppNavigate.jsx";
 import useImageStore, {
   requestStore,
@@ -15,11 +15,11 @@ function Icon() {
   return <img src={fileIcon} />;
 }
 
-const RenderUploadContent = ({ preview, onRemove, inputRef }) => {
-  if (preview) {
+const RenderUploadContent = ({ img, onRemove, inputRef }) => {
+  if (img) {
     return (
       <div className="img-wrapper">
-        <img src={preview} alt="Preview" />
+        <img src={img} alt="Preview" />
         <button
           onClick={(e) => onRemove(e, inputRef)}
           className="preview-action preview-remove"
@@ -59,6 +59,8 @@ function UploadPage() {
     generatedPrompt,
     setGeneratedPrompt,
   } = useImageStore();
+
+  const { img } = useImageStore1();
 
   const { handleImage1 } = useImageStore1();
 
@@ -140,7 +142,7 @@ function UploadPage() {
                 hidden
               />
               <RenderUploadContent
-                preview={preview}
+                img={img}
                 onRemove={handleRemove}
                 inputRef={inputRef}
               />
@@ -152,7 +154,7 @@ function UploadPage() {
           </div>
         </div>
       </div>
-
+      <img src={img} alt="Preview" />
       {/* <img src={imageUrl} alt="Generated" /> */}
     </section>
   );

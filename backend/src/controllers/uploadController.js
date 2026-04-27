@@ -1,35 +1,26 @@
 import cloudinary from "../config/cloudinary.js";
+import { uploadToCloudinary } from "../helper/imageHelper.js";
 import { errorResponse, successResponse } from "../helper/responseHelper.js";
 import { saveDb } from "../services/cloudinaryService.js";
 
 const uploadController = async (req, res) => {
-  console.log("Received file:", req.file);
   try {
-    const uploadResult = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "uploads" },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        },
-      );
+    if (!req.file) {
+      return errorResponse(res, 400, "No file uploaded");
+    }
 
-      stream.end(req.file.buffer);
-    });
+    console.log("Received file buffer:", req.file);
 
+    const uploadResult = await uploadToCloudinary(req.file.buffer);
+
+    console.log("Cloudinary upload result:", uploadResult);
+
+    const data = await saveDb(req.file, uploadResult);
+
+    console.log("Image uploaded and saved to DB:", data);
     return successResponse(res, 200, {
-      url: uploadResult.secure_url,
-      public_id: uploadResult.public_id,
+      data,
     });
-
-    // return;
-    // if (!req.file) return errorResponse(res, 400, "No image uploaded");
-
-    // const saveUpload = await saveDb(req.file);
-
-    // return successResponse(res, 200, {
-    //   savedUpload,
-    // });
   } catch (error) {
     return errorResponse(
       res,

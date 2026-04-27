@@ -6,6 +6,7 @@ import {
   toast,
 } from "../helper/helperImage.js";
 import useToastStore from "./useToastStore.js";
+import { uploadImage } from "../helper/helper.js";
 
 const useImageStore1 = create((set, get) => ({
   img: "",
@@ -15,13 +16,12 @@ const useImageStore1 = create((set, get) => ({
     const isValid = isValidImage(img) || isValidFileSize(img);
 
     if (!isValid) {
+      toast("Image invalid", "error");
       return;
     }
 
     const formData = new FormData();
     formData.append("image", img);
-
-    console.log("FormData:", formData.get("image"));
 
     const response = await fetch("http://localhost:5000/api/user/upload", {
       method: "POST",
@@ -29,8 +29,9 @@ const useImageStore1 = create((set, get) => ({
     });
 
     const data = await response.json();
-    console.log(data);
+    console.log("Upload response:", data.data);
 
+    set({ img: data.data.url });
     toast("Image uploaded successfully", "success");
   },
 }));
