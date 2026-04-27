@@ -21,13 +21,12 @@ const useImageStore1 = create((set, get) => ({
     const formData = new FormData();
     formData.append("image", img);
 
-    const response = await fetch(
-      "https://lami-si-penans.onrender.com/api/user/upload",
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
+    console.log("FormData:", formData.get("image"));
+
+    const response = await fetch("http://localhost:5000/api/user/upload", {
+      method: "POST",
+      body: formData,
+    });
 
     const data = await response.json();
     console.log(data);
