@@ -1,21 +1,25 @@
 import React, { use, useRef } from "react";
 import { useAppNavigate } from "../hooks/useAppNavigate.jsx";
-import useImageStore, {
-  requestStore,
-  useLoadStore,
-} from "../store/useImageStore.js";
+import useImageStore, { requestStore } from "../store/useImageStore.js";
 import Selections from "../components/Selections.jsx";
 import fileIcon from "../assets/img/file.png";
 import { useEffect } from "react";
 import { useState } from "react";
 import useImageStore1 from "../store/useImageStorecopy.js";
 import { preventDropDefault } from "../helper/helperImage.js";
+import Loaders from "../components/loaders.jsx";
+import useLoadStore from "../store/useLoadStore.js";
 
 function Icon() {
   return <img src={fileIcon} />;
 }
 
 const RenderUploadContent = ({ img, onRemove, inputRef }) => {
+  const { load } = useLoadStore();
+  if (load) {
+    return <Loaders />;
+  }
+
   if (img) {
     return (
       <div className="img-wrapper">
@@ -154,7 +158,7 @@ function UploadPage() {
           </div>
         </div>
       </div>
-      <img src={img} alt="Preview" />
+      <img src={img} alt="Preview" data-image="preview" />
       {/* <img src={imageUrl} alt="Generated" /> */}
     </section>
   );

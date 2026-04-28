@@ -6,13 +6,15 @@ import {
   toast,
 } from "../helper/helperImage.js";
 import useToastStore from "./useToastStore.js";
-import { uploadImage } from "../helper/helper.js";
+import { getUrl, uploadImage } from "../helper/helper.js";
+import { waitforElement } from "../helper/load.js";
 
 const useImageStore1 = create((set, get) => ({
   img: "",
 
   handleImage1: async (e) => {
     const img = getImage(e);
+
     const isValid = isValidImage(img) || isValidFileSize(img);
 
     if (!isValid) {
@@ -20,18 +22,12 @@ const useImageStore1 = create((set, get) => ({
       return;
     }
 
-    const formData = new FormData();
-    formData.append("image", img);
+    const data = await uploadImage(img);
+    const url = getUrl(data);
 
-    const response = await fetch("http://localhost:5000/api/user/upload", {
-      method: "POST",
-      body: formData,
-    });
+    set({ img: url });
 
-    const data = await response.json();
-    console.log("Upload response:", data.data);
-
-    set({ img: data.data.url });
+    await waitforElement('[data-image="preview"]');
     toast("Image uploaded successfully", "success");
   },
 }));
