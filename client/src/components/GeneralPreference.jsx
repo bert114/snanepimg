@@ -1,3 +1,6 @@
+import { useState } from "react";
+import usePromptStore from "../store/usePromptStore.js";
+
 const purposes = [
   "All",
   "Icon",
@@ -9,11 +12,32 @@ const purposes = [
 ];
 
 const models = [
-  { title: "Realistic", desc: "Photo-like" },
-  { title: "Illustration", desc: "Drawn style" },
-  { title: "3D", desc: "Depth/object" },
-  { title: "Anime", desc: "Stylized" },
-  { title: "Minimalist", desc: "Clean/simple" },
+  {
+    title: "Realistic",
+    desc: "Photo-like generation.",
+    icon: "📷",
+    recommended: true,
+  },
+  {
+    title: "Illustration",
+    desc: "Drawn visual style.",
+    icon: "🎨",
+  },
+  {
+    title: "3D",
+    desc: "Depth and objects.",
+    icon: "🧊",
+  },
+  {
+    title: "Anime",
+    desc: "Stylized characters.",
+    icon: "✨",
+  },
+  {
+    title: "Minimalist",
+    desc: "Clean and simple.",
+    icon: "◻",
+  },
 ];
 
 const backgrounds = [
@@ -33,6 +57,9 @@ const ratios = [
 ];
 
 function GenerationPreferences() {
+  const [selectedModel, setSelectedModel] = useState("Realistic");
+  const { handleGenerate, isUploaded } = usePromptStore();
+
   return (
     <section className="generation-preferences">
       <header className="generation-preferences__header">
@@ -56,14 +83,31 @@ function GenerationPreferences() {
         </PreferenceBlock>
 
         <PreferenceBlock title="Style / Model">
-          <div className="card-grid">
-            {models.map((item, index) => (
-              <OptionCard
+          <div className="model-card-grid">
+            {models.map((item) => (
+              <button
                 key={item.title}
-                title={item.title}
-                desc={item.desc}
-                active={index === 0}
-              />
+                type="button"
+                onClick={() => setSelectedModel(item.title)}
+                className={`model-card ${
+                  selectedModel === item.title ? "model-card--active" : ""
+                }`}
+              >
+                <span className="model-card__icon">{item.icon}</span>
+
+                <span className="model-card__content">
+                  <span className="model-card__title">
+                    {selectedModel === item.title && "✓ "}
+                    {item.title}
+                  </span>
+
+                  <span className="model-card__desc">{item.desc}</span>
+                </span>
+
+                {item.recommended && (
+                  <span className="model-card__tag">Recommended</span>
+                )}
+              </button>
             ))}
           </div>
         </PreferenceBlock>
@@ -119,6 +163,14 @@ function GenerationPreferences() {
             <option>4 images</option>
           </select>
         </PreferenceBlock>
+        <button
+          className="primary-btn"
+          onClick={handleGenerate}
+          data-testid="generate-btn"
+          disabled={!isUploaded}
+        >
+          Generate
+        </button>
       </div>
     </section>
   );

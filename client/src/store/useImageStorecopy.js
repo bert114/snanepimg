@@ -8,6 +8,7 @@ import useToastStore from "./useToastStore.js";
 import { getUrl, uploadImage } from "../helper/helper.js";
 import { waitforElement } from "../helper/load.js";
 import useLoadStore from "./useLoadStore.js";
+import usePromptStore from "./usePromptStore.js";
 
 const useImageStore1 = create((set, get) => ({
   img: "",
@@ -15,6 +16,7 @@ const useImageStore1 = create((set, get) => ({
   handleImage1: async (e) => {
     const { setLoad } = useLoadStore.getState();
     const { showToast } = useToastStore.getState();
+    const { setIsUploaded } = usePromptStore.getState();
     set({ img: "" });
     setLoad(true);
 
@@ -38,6 +40,7 @@ const useImageStore1 = create((set, get) => ({
       await waitforElement('[data-image="preview"]');
 
       showToast("Image uploaded successfully", "success");
+      setIsUploaded(true);
     } catch (error) {
       showToast(error.message || "Failed to upload image", "error");
       setLoad(false);
