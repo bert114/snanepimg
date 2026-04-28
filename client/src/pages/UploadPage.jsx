@@ -9,119 +9,13 @@ import useImageStore1 from "../store/useImageStorecopy.js";
 import { preventDropDefault } from "../helper/helperImage.js";
 import Loaders from "../components/loaders.jsx";
 import useLoadStore from "../store/useLoadStore.js";
-
-function Icon() {
-  return <img src={fileIcon} />;
-}
-
-const RenderUploadContent = ({ img, onRemove, inputRef }) => {
-  const { load } = useLoadStore();
-  if (load) {
-    return <Loaders />;
-  }
-
-  if (img) {
-    return (
-      <div className="img-wrapper">
-        <img src={img} alt="Preview" />
-        <button
-          onClick={(e) => onRemove(e, inputRef)}
-          className="preview-action preview-remove"
-          id="removeImageBtn"
-          type="button"
-          aria-label="Remove image"
-        >
-          <div className="icon-preview">x</div>
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <span className="upload-title">
-        Drag & Drop your files or <u>Browse</u>
-      </span>
-      <span className="upload-subtitle">JPG, PNG, WEBP · max 5MB</span>
-    </>
-  );
-};
+import UploadContent from "../components/UploadContent.jsx";
 
 function UploadPage() {
   const inputRef = useRef(null);
   const [imageUrl, setImageUrl] = useState("");
-  const { goPromptReview } = useAppNavigate();
-  const {
-    error,
-    handleImage,
-    preview,
-    handleRemove,
-    setSelections,
-    selections,
-    validateSelections,
-    imgFile,
-    generatedPrompt,
-    setGeneratedPrompt,
-  } = useImageStore();
-
-  const { img } = useImageStore1();
-
-  const { handleImage1 } = useImageStore1();
-
-  const { sendReq } = requestStore();
+  const { removeImage, handleImage1, img } = useImageStore1();
   const { load, setLoad } = useLoadStore();
-
-  const handleContinue = async () => {
-    const isValid = validateSelections();
-
-    if (!isValid || load) return;
-
-    const data = await sendReq();
-
-    setGeneratedPrompt(data.result);
-    goPromptReview();
-  };
-
-  const handleGenerate = async (prompt) => {
-    const response = await fetch(
-      `https://lami-si-penans.onrender.com/api/images/generate`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "img4",
-          prompt,
-          n: 1,
-          size: "1024x1024",
-          response_format: "url",
-        }),
-      },
-    );
-
-    const data = await response.json();
-    console.log(data);
-    setImageUrl(data?.data?.data?.[0]?.url || "");
-  };
-
-  const test = async () => {
-    const formData = new FormData();
-    formData.append("image", inputRef.current.files[0]);
-
-    const res = await fetch("http://localhost:5000/api/vision/describe", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    await handleGenerate(data.description);
-
-    console.log(data);
-
-    return data;
-  };
 
   return (
     <section
@@ -145,9 +39,9 @@ function UploadPage() {
                 accept="image/png,image/jpeg,image/webp"
                 hidden
               />
-              <RenderUploadContent
+              <UploadContent
                 img={img}
-                onRemove={handleRemove}
+                onRemove={removeImage}
                 inputRef={inputRef}
               />
             </label>
@@ -158,8 +52,7 @@ function UploadPage() {
           </div>
         </div>
       </div>
-      <img src={img} alt="Preview" data-image="preview" />
-      {/* <img src={imageUrl} alt="Generated" /> */}
+      {/* <img src={img} alt="Preview" data-image="preview" /> */}
     </section>
   );
 }

@@ -13,7 +13,6 @@ export const IMAGE_ERRORS = {
 export async function uploadImage(img) {
   const { setLoad } = useLoadStore.getState();
 
-  setLoad(true);
   const formData = new FormData();
   formData.append("image", img);
 
@@ -30,8 +29,6 @@ export async function uploadImage(img) {
       },
     },
   );
-
-  setLoad(false);
 
   return response;
 }

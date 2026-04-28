@@ -1,7 +1,7 @@
 import useToastStore from "../store/useToastStore.js";
-export const toast = useToastStore.getState().showToast;
 
 export const isValidImage = (file) => {
+  const toast = useToastStore.getState().showToast;
   if (!file) {
     toast("No file selected", "error");
     return false;
@@ -16,6 +16,7 @@ export const isValidImage = (file) => {
 };
 
 export const isValidFileSize = (file, maxMB = 5) => {
+  const toast = useToastStore.getState().showToast;
   if (!file) {
     toast("No file selected", "error");
     return false;

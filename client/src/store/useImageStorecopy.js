@@ -3,33 +3,48 @@ import {
   getImage,
   isValidFileSize,
   isValidImage,
-  toast,
 } from "../helper/helperImage.js";
 import useToastStore from "./useToastStore.js";
 import { getUrl, uploadImage } from "../helper/helper.js";
 import { waitforElement } from "../helper/load.js";
+import useLoadStore from "./useLoadStore.js";
 
 const useImageStore1 = create((set, get) => ({
   img: "",
 
   handleImage1: async (e) => {
-    const img = getImage(e);
+    const { setLoad } = useLoadStore.getState();
+    const { showToast } = useToastStore.getState();
+    set({ img: "" });
+    setLoad(true);
 
-    const isValid = isValidImage(img) || isValidFileSize(img);
+    try {
+      const img = getImage(e);
 
-    if (!isValid) {
-      toast("Image invalid", "error");
-      return;
+      const isValid = isValidImage(img) && isValidFileSize(img);
+
+      if (!isValid) {
+        throw new Error("Image invalid");
+      }
+
+      const data = await uploadImage(img);
+      const url = getUrl(data);
+
+      set({ img: url });
+      setLoad(false);
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      await waitforElement('[data-image="preview"]');
+
+      showToast("Image uploaded successfully", "success");
+    } catch (error) {
+      showToast(error.message || "Failed to upload image", "error");
+      setLoad(false);
     }
-
-    const data = await uploadImage(img);
-    const url = getUrl(data);
-
-    set({ img: url });
-
-    await waitforElement('[data-image="preview"]');
-    toast("Image uploaded successfully", "success");
   },
+
+  removeImage: () => set({ img: "" }),
 }));
 
 export default useImageStore1;
