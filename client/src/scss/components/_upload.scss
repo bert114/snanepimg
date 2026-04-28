@@ -33,7 +33,6 @@
 
 #screen-upload {
   min-height: 100%;
-  padding: 28px 18px;
 }
 
 #screen-upload .panel.upload-preferences-panel {
@@ -233,10 +232,6 @@
 }
 
 @media (max-width: 520px) {
-  #screen-upload {
-    padding: 18px 12px;
-  }
-
   #screen-upload .panel.upload-preferences-panel {
     padding: 16px;
   }

@@ -1,0 +1,10 @@
+.reference {
+  display: flex;
+  max-width: 1200px;
+  margin-inline: auto;
+  gap: 1rem;
+
+  > * {
+    flex: 1;
+  }
+}
