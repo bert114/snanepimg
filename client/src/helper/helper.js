@@ -1,3 +1,5 @@
+import axios from "axios";
+import useLoadStore from "../store/useLoadStore.js";
 export function isValidFileSize(file, maxSize = 5 * 1024 * 1024) {
   return file.size <= maxSize;
 }
@@ -9,13 +11,33 @@ export const IMAGE_ERRORS = {
 };
 
 export async function uploadImage(img) {
+  const { setLoad } = useLoadStore.getState();
+
+  setLoad(true);
   const formData = new FormData();
   formData.append("image", img);
 
-  const response = await fetch("http://localhost:5000/api/user/upload", {
-    method: "POST",
-    body: formData,
-  });
+  const response = await axios.post(
+    "http://localhost:5000/api/user/upload",
+    formData,
+    {
+      onUploadProgress: (progressEvent) => {
+        const percent = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total,
+        );
+        //setUploadProgress(percent);
+        console.log(`${percent}% uploaded`);
+      },
+    },
+  );
 
-  return response.json();
+  setLoad(false);
+
+  return response;
+}
+
+export function getUrl(img) {
+  const path = img.data.data.url;
+
+  return path;
 }

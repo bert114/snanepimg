@@ -34,6 +34,24 @@
 #screen-upload {
   min-height: 100%;
   padding: 28px 18px;
+}
+
+#screen-upload .panel.upload-preferences-panel {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    180deg,
+    var(--surface),
+    rgba(255, 255, 255, 0.02)
+  );
+
+  border: 1px solid var(--border);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 255, 255, 0.06) inset;
+  padding: 22px;
+
   background:
     radial-gradient(
       1200px 600px at 20% 0%,
@@ -46,22 +64,6 @@
       transparent 52%
     ),
     var(--bg);
-}
-
-#screen-upload .panel.upload-preferences-panel {
-  width: min(980px, 100%);
-  margin: 0 auto;
-  border-radius: var(--radius-xl);
-  background: linear-gradient(
-    180deg,
-    var(--surface),
-    rgba(255, 255, 255, 0.02)
-  );
-  border: 1px solid var(--border);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(0, 255, 255, 0.06) inset;
-  padding: 22px;
 }
 
 .upload-preferences-grid {
