@@ -8,27 +8,20 @@ import UploadPage from "./pages/UploadPage";
 import MainLayout from "./layout/MainLayout";
 import Toast from "./components/Toast.jsx";
 import useToastStore from "./store/useToastStore.js";
+import Flow from "./idk/Flow.jsx";
 
 function App() {
   const { showToast, message, type } = useToastStore();
 
   return (
     <>
-      <BrowserRouter>
-        <Toast
-          message={message}
-          type={type}
-          onClose={() => showToast("", "success")}
-        />
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/upload" element={<UploadPage />} />
-            <Route path="/result" element={<Results />} />
-            <Route path="/promptreview" element={<PromptReview />} />
-            <Route path="/" element={<UploadPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Toast
+        message={message}
+        type={type}
+        onClose={() => showToast("", "success")}
+      />
+
+      <MainLayout />
     </>
   );
 }

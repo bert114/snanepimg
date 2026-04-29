@@ -1,5 +1,5 @@
-import { useState } from "react";
-import usePromptStore from "../store/usePromptStore.js";
+import { useEffect, useState } from "react";
+import usePromptStore, { selectedSettings } from "../store/usePromptStore.js";
 
 const purposes = [
   "All",
@@ -59,6 +59,34 @@ const ratios = [
 function GenerationPreferences() {
   const [selectedModel, setSelectedModel] = useState("Realistic");
   const { handleGenerate, isUploaded } = usePromptStore();
+  const {
+    imagePurpose,
+    model,
+    background,
+    color,
+    aspectRatio,
+    numberOfImages,
+  } = selectedSettings();
+
+  const {
+    setImagePurpose,
+    setModel,
+    setBackground,
+    setColor,
+    setAspectRatio,
+    setNumberOfImages,
+  } = selectedSettings();
+
+  useEffect(() => {
+    console.log("Updated settings:", {
+      imagePurpose,
+      model,
+      background,
+      color,
+      aspectRatio,
+      numberOfImages,
+    });
+  }, [imagePurpose, model, background, color, aspectRatio, numberOfImages]);
 
   return (
     <section className="generation-preferences">
@@ -69,7 +97,10 @@ function GenerationPreferences() {
 
       <div className="generation-preferences__body">
         <PreferenceBlock title="Image Purpose">
-          <div className="chip-list">
+          <div
+            className="chip-list"
+            onClick={(e) => setImagePurpose(e.target.innerText)}
+          >
             {purposes.map((item, index) => (
               <button
                 key={item}
@@ -88,7 +119,10 @@ function GenerationPreferences() {
               <button
                 key={item.title}
                 type="button"
-                onClick={() => setSelectedModel(item.title)}
+                onClick={() => {
+                  setSelectedModel(item.title);
+                  setModel(item.title);
+                }}
                 className={`model-card ${
                   selectedModel === item.title ? "model-card--active" : ""
                 }`}
@@ -113,7 +147,10 @@ function GenerationPreferences() {
         </PreferenceBlock>
 
         <PreferenceBlock title="Background">
-          <div className="card-grid card-grid--three">
+          <div
+            className="card-grid card-grid--three"
+            onClick={(e) => setBackground(e.target.innerText)}
+          >
             {backgrounds.map((item, index) => (
               <OptionCard
                 key={item.title}
@@ -133,7 +170,12 @@ function GenerationPreferences() {
 
           <div className="chip-list chip-list--small">
             {colors.map((item) => (
-              <button key={item} type="button" className="chip chip--small">
+              <button
+                onClick={() => setColor(item)}
+                key={item}
+                type="button"
+                className="chip chip--small"
+              >
                 {item}
               </button>
             ))}
@@ -144,6 +186,7 @@ function GenerationPreferences() {
           <div className="ratio-list">
             {ratios.map((item, index) => (
               <button
+                onClick={() => setAspectRatio(item.label)}
                 key={item.label}
                 type="button"
                 className={`ratio-button ${index === 0 ? "ratio-button--active" : ""}`}
@@ -156,7 +199,10 @@ function GenerationPreferences() {
         </PreferenceBlock>
 
         <PreferenceBlock title="Number of Images">
-          <select className="image-count-select">
+          <select
+            className="image-count-select"
+            onChange={(e) => setNumberOfImages(e.target.value)}
+          >
             <option>Auto — depends on selected model</option>
             <option>1 image</option>
             <option>2 images</option>
