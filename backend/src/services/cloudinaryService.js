@@ -5,6 +5,8 @@ import { bufferToBase64 } from "../utils/imageUtils.js";
 export const saveDb = async (file, uploadResult) => {
   const { originalname, mimetype, size, path, filename } = file;
 
+  console.log(file);
+
   const data = await Upload.create({
     originalName: originalname,
     mimeType: mimetype,

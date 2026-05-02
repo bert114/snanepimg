@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import usePromptStore, { selectedSettings } from "../store/usePromptStore.js";
+import useImageStore1 from "../store/useImageStorecopy.js";
 
 const purposes = [
   "All",
@@ -77,6 +78,8 @@ function GenerationPreferences() {
     setNumberOfImages,
   } = selectedSettings();
 
+  const { img } = useImageStore1();
+
   useEffect(() => {
     console.log("Updated settings:", {
       imagePurpose,
@@ -85,6 +88,7 @@ function GenerationPreferences() {
       color,
       aspectRatio,
       numberOfImages,
+      img,
     });
   }, [imagePurpose, model, background, color, aspectRatio, numberOfImages]);
 

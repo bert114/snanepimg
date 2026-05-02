@@ -1,11 +1,14 @@
 import { create } from "zustand";
+import { getDescription } from "../helper/util.js";
 
 const usePromptStore = create((set) => ({
   prompt: "",
-  isUploaded: false,
+  isUploaded: true,
   setPrompt: (newPrompt) => set({ prompt: newPrompt }),
   setIsUploaded: (status) => set({ isUploaded: status }),
-  handleGenerate: () => {},
+  handleGenerate: () => {
+    getDescription();
+  },
 }));
 
 export const selectedSettings = create((set) => ({

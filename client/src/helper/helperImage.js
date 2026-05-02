@@ -1,3 +1,4 @@
+import useImageStore from "../store/useImageStore.js";
 import useToastStore from "../store/useToastStore.js";
 
 export const isValidImage = (file) => {
@@ -32,6 +33,7 @@ export const isValidFileSize = (file, maxMB = 5) => {
 
 export function getImage(e) {
   e.preventDefault();
+
   return e.target.files?.[0] || e.dataTransfer?.files?.[0] || null;
 }
 

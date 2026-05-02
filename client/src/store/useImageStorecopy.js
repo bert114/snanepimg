@@ -11,7 +11,10 @@ import useLoadStore from "./useLoadStore.js";
 import usePromptStore from "./usePromptStore.js";
 
 const useImageStore1 = create((set, get) => ({
-  img: "",
+  file: null,
+  img:
+    "" ||
+    "https://res.cloudinary.com/dmincuczc/image/upload/v1777499902/uploads/file_iwyxmu.png",
 
   handleImage1: async (e) => {
     const { setLoad } = useLoadStore.getState();
@@ -22,7 +25,7 @@ const useImageStore1 = create((set, get) => ({
 
     try {
       const img = getImage(e);
-
+      set({ file: img });
       const isValid = isValidImage(img) && isValidFileSize(img);
 
       if (!isValid) {
@@ -31,6 +34,8 @@ const useImageStore1 = create((set, get) => ({
 
       const data = await uploadImage(img);
       const url = getUrl(data);
+
+      console.log(data);
 
       set({ img: url });
       setLoad(false);
